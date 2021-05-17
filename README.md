@@ -1,99 +1,50 @@
-# keras-yolo3
+**如果帮到您请给个 star ✨✨✨，您的 star 是我最大的鼓励！**
 
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
-
-## Introduction
-
-A Keras implementation of YOLOv3 (Tensorflow backend) inspired by [allanzelener/YAD2K](https://github.com/allanzelener/YAD2K).
-
-
+# Yolov3 keras 漂浮物检测 万能运行 数据集制作
 ---
 
-## Quick Start
+# 1.环境准备
+首先确保自己的环境：
 
-1. Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
-2. Convert the Darknet YOLO model to a Keras model.
-3. Run YOLO detection.
-
-```
-wget https://pjreddie.com/media/files/yolov3.weights
-python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
-python yolo_video.py [OPTIONS...] --image, for image detection mode, OR
-python yolo_video.py [video_path] [output_path (optional)]
+```text
+pip install -i https://pypi.douban.com/simple/ --trusted-host=pypi.douban.com/simple -r requirements.txt
 ```
 
-For Tiny YOLOv3, just do in a similar way, just specify model path and anchor path with `--model model_file` and `--anchors anchor_file`.
+### 2.文件放置规范
+1,图片放在：VOCdevkit\VOC2007\JPEGImages
+2,xml标签放在：VOCdevkit\VOC2007\Annotations
 
-### Usage
-Use --help to see usage of yolo_video.py:
+3，训练集信息放train.txt，例如:  文件路径 物体1的x1,y1,x2,y2,物体1类别  物体2的x1,y1,x2,y2,物体2类别，如：
+
+```shell
+E:\keras-yolo3\VOCdevkit\VOC2007\JPEGImages\000000.jpg 60,66,910,1108,0
 ```
-usage: yolo_video.py [-h] [--model MODEL] [--anchors ANCHORS]
-                     [--classes CLASSES] [--gpu_num GPU_NUM] [--image]
-                     [--input] [--output]
 
-positional arguments:
-  --input        Video input path
-  --output       Video output path
+4,权重yolo_weights.h5放在model_data文件夹下面，下载地址：链接：https://pan.baidu.com/s/1GQfN4y1v0kTkq3nGf8oaGQ  ， 提取码：z7uv 
 
-optional arguments:
-  -h, --help         show this help message and exit
-  --model MODEL      path to model weight file, default model_data/yolo.h5
-  --anchors ANCHORS  path to anchor definitions, default
-                     model_data/yolo_anchors.txt
-  --classes CLASSES  path to class definitions, default
-                     model_data/coco_classes.txt
-  --gpu_num GPU_NUM  Number of GPU to use, default 1
-  --image            Image detection mode, will ignore all positional arguments
+5,修改model_data/voc_classes.txt，里面放你的识别类名称，如
+
+```shell
+hat
+person
 ```
----
 
-4. MultiGPU usage: use `--gpu_num N` to use N GPUs. It is passed to the [Keras multi_gpu_model()](https://keras.io/utils/#multi_gpu_model).
+### 3.开始训练
+```shell script
+python train.py
+```
 
-## Training
+# 识别
+运行命令：
+```shell script
+python yolo_video.py
+```
 
-1. Generate your own annotation file and class names file.  
-    One row for one image;  
-    Row format: `image_file_path box1 box2 ... boxN`;  
-    Box format: `x_min,y_min,x_max,y_max,class_id` (no space).  
-    For VOC dataset, try `python voc_annotation.py`  
-    Here is an example:
-    ```
-    path/to/img1.jpg 50,100,150,200,0 30,50,200,120,3
-    path/to/img2.jpg 120,300,250,600,2
-    ...
-    ```
+**如果帮到您请给个 star ✨✨✨，您的 star 是我最大的鼓励！**
 
-2. Make sure you have run `python convert.py -w yolov3.cfg yolov3.weights model_data/yolo_weights.h5`  
-    The file model_data/yolo_weights.h5 is used to load pretrained weights.
+**如果能帮到您的项目快速落地，可以 buy me a coffee ☕**
+![](./doc/BuyMeACoffee.jpg)
 
-3. Modify train.py and start training.  
-    `python train.py`  
-    Use your trained weights or checkpoint weights with command line option `--model model_file` when using yolo_video.py
-    Remember to modify class path or anchor path, with `--classes class_file` and `--anchors anchor_file`.
 
-If you want to use original pretrained weights for YOLOv3:  
-    1. `wget https://pjreddie.com/media/files/darknet53.conv.74`  
-    2. rename it as darknet53.weights  
-    3. `python convert.py -w darknet53.cfg darknet53.weights model_data/darknet53_weights.h5`  
-    4. use model_data/darknet53_weights.h5 in train.py
-
----
-
-## Some issues to know
-
-1. The test environment is
-    - Python 3.5.2
-    - Keras 2.1.5
-    - tensorflow 1.6.0
-
-2. Default anchors are used. If you use your own anchors, probably some changes are needed.
-
-3. The inference result is not totally the same as Darknet but the difference is small.
-
-4. The speed is slower than Darknet. Replacing PIL with opencv may help a little.
-
-5. Always load pretrained weights and freeze layers in the first stage of training. Or try Darknet training. It's OK if there is a mismatch warning.
-
-6. The training strategy is for reference only. Adjust it according to your dataset and your goal. And add further strategy if needed.
-
-7. For speeding up the training process with frozen layers train_bottleneck.py can be used. It will compute the bottleneck features of the frozen model first and then only trains the last layers. This makes training on CPU possible in a reasonable time. See [this](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html) for more information on bottleneck features.
+也可以加我的 WeChat 和我一起探讨更多的可能！
+![](./doc/WeChat.jpg)
