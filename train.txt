@@ -1,0 +1,1 @@
+E:\keras-yolo3\VOCdevkit\VOC2007\JPEGImages\000000.jpg 60,66,910,1108,0
